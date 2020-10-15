@@ -133,24 +133,26 @@ router.delete("/user", (req, res) => {
          res.status(200).json(docs);
     });
 });
-/*
+
 //LOGIN
 //http://localhost:8000/api/1.0/login
+/*
 router.post("/login", async(req, res) => {
     var body = req.body;
-    console.log(body.name);
-    if (body.name == null) {
-        res.status(300).json({msn: "El nombre es necesario"});
+    console.log(body.email);
+    if (body.email == null) {
+        res.status(300).json({msn: "El email es necesario"});
              return;
     }
     if (body.password == null) {
         res.status(300).json({msn: "El password es necesario"});
         return;
     }
-    var results = await USER.find({name: body.name, password:body.password});
+    var results = await USER.find({email: body.email, password:body.password});
+    
     console.log(results);
     if (results.length == 1) {
-        res.status(200).json({msn: "Bienvenido " + body.name + " al sistema"});
+        res.status(200).json({msn: "Bienvenido "  + body.email + " al sistema"});
         return;
     }
     res.status(200).json({msn: "Credenciales incorrectas"});

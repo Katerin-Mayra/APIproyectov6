@@ -7,6 +7,28 @@ var REST= require("../database/restaurante");
 /*router.use(fileUpload({
     fileSize: 50 * 1024 * 1024
 }));*/
+
+router.get("/restaurante",(req, res) => {
+    var skip = 0;
+    var limit = 10;
+    if (req.query.skip != null) {
+      skip = req.query.skip;
+    }
+  
+    if (req.query.limit != null) {
+      limit = req.query.limit;
+    }
+    REST.find({}).skip(skip).limit(limit).exec((err, docs) => {
+      if (err) {
+        res.status(500).json({
+          "msn" : "Error en la db"
+        });
+        return;
+      }
+      res.status(200).json(docs);
+    });
+  });
+  /*
 router.get("/restaurante",(req,res)=>{
  //filtrar
     //http://localhost:8000/api/1.0/restaurante?
@@ -51,8 +73,23 @@ router.get("/restaurante",(req,res)=>{
        res.status(200).json(docs);
        return;
    });
-});
-
+});*/
+router.post("/restaurante",(req, res) => {
+    var data = req.body;
+    //Validacion
+    //Ustedes se opupan de validar estos datos
+    //OJO
+    data["registerdate"] = new Date();
+    var newrestaurant = new REST(data);
+    newrestaurant.save().then( (rr) => {
+      //content-type
+      res.status(200).json({
+        "id" : rr._id,
+        "msn" : "Restaurante Agregado con exito"
+      });
+    });
+  });
+/*
 router.post("/restaurante",(req,res)=>{
     var RESTRest =req.body;
     var RESTDB=new REST (RESTRest);
@@ -70,7 +107,10 @@ router.post("/restaurante",(req,res)=>{
         res.status(200).json(docs);
         return;
     })
-});
+});*/
+
+///
+
 
 router.put("/restaurante",(req,res)=>{
     var params=req.query;
@@ -80,7 +120,7 @@ router.put("/restaurante",(req,res)=>{
         return;
     }
     //creamos filtros para put que es lo que puedo hacer q se actualize
-    var allowkeylist = ["name","nit", "direccion", "telefono"];
+    /*var allowkeylist = ["name","nit","property", "street", "phone", "lat", "lon", "logo", "picture"];
 
     var keys = Object.keys(bodydata);
     var updateobjectdata = {};
@@ -96,13 +136,30 @@ router.put("/restaurante",(req,res)=>{
             res.status(500).json({msn: "Existen problemas en la base de datos"});
              return;
          } 
-         res.status(200).json(docs);
-    });
+         ///
+         var id = docs._id
+
+         res.status(200).json({
+            msn: id
+          })
+        ///
+         ///res.status(200).json(docs);
+    });*/
+    REST.findByIdAndUpdate(params.id,bodydata,(err,docs)=>{
+        if(err){
+          res.json(500).json({
+            message:'error'
+          });
+        }
+        res.status(200).json();
+      });
 });
 
 
 
 router.delete("/restaurante",(req,res)=>{
+
+    console.log(req.query);
     var params = req.query;
     if (params.id == null) {
         res.status(300).json({msn: "El parámetro ID es necesario"});
@@ -113,7 +170,10 @@ router.delete("/restaurante",(req,res)=>{
             res.status(500).json({msn: "Existen problemas en la base de datos"});
              return;
          } 
-         res.status(200).json(docs);
+         res.status(200).json({
+             msm:"Eliminado",
+             docs
+         });
     });
 });
 
@@ -127,7 +187,10 @@ router.patch("/restaurante", (req, res) => {
     var id = req.query.id;
     var params = req.body;
     REST.findOneAndUpdate({_id: id}, params, (err, docs) => {
-    res.status(200).json(docs);
+    res.status(200).json({
+        msm:"Actualizado",
+        docs
+    });
     });
 });
 

@@ -10,6 +10,7 @@ var Users = require("../database/user");
 
 /*LOGIN*/
 //http://localhost:8000/api/1.0/login
+
 router.post("/login", (req, res, next) => {
   var email = req.body.email;
   var password = req.body.password;
@@ -24,14 +25,25 @@ router.post("/login", (req, res, next) => {
     if (doc) {
        console.log(result);
       //res.status(200).json(doc);
-      jwt.sign({name: doc.email, password: doc.password}, "secretkey123", (err, token) => {
+      /*jwt.sign({name: doc.email, password: doc.password}, "secretkey123", (err, token) => {
           console.log(result);
           res.status(200).json({
             resp:200,
             token : token,
             dato:doc
           });
-      })
+      })*/
+      
+        console.log(result);
+        res.status(200).json({
+          resp:200,
+          //token : token,
+          dato:doc,
+          msn : "ingreso"
+          
+        });
+        
+    
     } else {
       res.status(400).json({
         resp: 400,
@@ -244,7 +256,7 @@ router.post("/cliente",  (req, res) => {
     res.status(200).json({
       "resp": 200,
       "dato": newcliente,
-      "msn" : "Cliente agregado con exito"
+      "msn" : "Cliente agregado con exito k"
     });
   });
 });
@@ -297,6 +309,7 @@ router.get(/cliente\/[a-z0-9]{1,}$/, (req, res) => {
 });
 
 //Elimina un cliente
+//http://localhost:8000/api/1.0/cliente/5f8657d9cfa905001d8849ce
 router.delete(/cliente\/[a-z0-9]{1,}$/, (req, res) => {
   var url = req.url;
   var id = url.split("/")[2];
@@ -341,8 +354,9 @@ router.put(/cliente\/[a-z0-9]{1,}$/, (req, res) => {
   var url = req.url;
   var id = url.split("/")[2];
   var keys  = Object.keys(req.body);
-  var oficialkeys = ['nombre', 'ci', 'telefono', 'email',];
+  var oficialkeys = ['nombre', 'ci', 'telefono', 'email'];
   var result = _.difference(oficialkeys, keys);
+ 
   if (result.length > 0) {
     res.status(400).json({
       "msn" : "Error no se puede actualizar intentar con patch"

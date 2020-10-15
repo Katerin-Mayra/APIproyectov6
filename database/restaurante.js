@@ -13,30 +13,41 @@ var RESTAURANTESCHEMA =new mongoose.Schema({
         required:[true,"Es necesario el NIT de su restaurante"]
         
     },
-    propietario:{
+    property:{
         type:String,
         required:[true,"Es necesario el nombre del propietario "]
         
     },
-    direccion:{
+    street:{
         type: String,
         required:[true,"La direccion es necesario"],
         
     },
-    telefono:{
+    phone:{
         type: Number,
          
         required:[true,"El numero es necesario"],
 
     },
+    
     log:{
         type: String,
-        required: [true,"EL log es necesario"],
+        required: [true,"EL log K es necesario"],
+        default: "111111111",
     },
-    lat:String,
+    lat:{
+        type: String,
+        required: [true,"EL log es necesario"],
+        default: "111111111",
+    },
     logo:String,
-    date:Date,
-    foto:String
+    registerdate:Date,
+    
+    picture:{
+        type: String, 
+        default: "No IMAGE",
+        required: [true, "la ruta de la imagen es necesaria"]
+    }
 
 });
 var REST = mongoose.model("restaurante",RESTAURANTESCHEMA);
