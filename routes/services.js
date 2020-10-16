@@ -110,9 +110,11 @@ router.get("/menus",(req, res) => {
       });
       return;
     }
-    res.json({
-      result : docs
-    });
+    
+    res.status(200).json(
+      docs
+      
+    );
   });
 });
 
@@ -134,6 +136,7 @@ router.get(/menus\/[a-z0-9]{1,}$/, (req, res) => {
 
 //http://localhost:8000/api/1.0/menus/?id=5f81420fd4b47400cc212c8e
 //router.delete('/menus/:id', (req, res,)
+/*
 router.delete('/menus', (req, res,) => {
   var idMenus = req.params.id;
 
@@ -153,7 +156,30 @@ router.delete('/menus', (req, res,) => {
       });
 
 
+});*/
+
+///eliminar menus kato
+router.delete("/menus",(req,res)=>{
+
+  console.log(req.query);
+  var params = req.query;
+  if (params.id == null) {
+      res.status(300).json({msn: "El parámetro ID es necesario"});
+      return;
+  }
+  Menus.remove({_id: params.id}, (err, docs) => {
+      if (err) {
+          res.status(500).json({msn: "Existen problemas en la base de datos"});
+           return;
+       } 
+       res.status(200).json({
+           msm:"Eliminado",
+           docs
+       });
+  });
 });
+
+
 
 //Elimina un restaurant
 /*router.delete(/menus\/[a-z0-9]{1,}$/, (req, res) => {
@@ -164,12 +190,34 @@ router.delete('/menus', (req, res,) => {
         message: "Menu eliminado"
         });
   });
-});*/
+});
+*/
+
+
+//actualizar kato
+router.patch("/menus", (req, res) => {
+  console.log(req.body);
+    if (req.query.id == null) {
+        res.status(300).json({
+        msn: "Error no existe menu"
+    });
+        return;
+    }
+    var id = req.query.id;
+    var params = req.body;
+    Menus.findByIdAndUpdate(id, params, (err, docs) => {
+    res.status(200).json({
+        msn:"Actualizado menu",
+        docs
+    });
+    });
+});
+
 
 //Actualizar solo por elementos
 //http://localhost:8000/api/1.0/menus/?id=5f81420fd4b47400cc212c8e
 //"/menus/:id"
-router.patch("/menus",(req, res) => {
+/*router.patch("/menus",(req, res) => {
   var params = req.body;
   var id = req.query.id;
   //Collection of data
@@ -206,7 +254,7 @@ router.patch("/menus",(req, res) => {
     
   });
 });
-
+*/
 //Actualiza los datos del restaurant
 router.put(/menus\/[a-z0-9]{1,}$/, (req, res) => {
   var url = req.url;
@@ -248,8 +296,8 @@ router.put(/menus\/[a-z0-9]{1,}$/, (req, res) => {
 /*CLIENTE*/
 
 router.post("/cliente",  (req, res) => {
-
-  var data = req.body;
+console.log(req.body);
+  var data = req.body;0
   data ["registerdate"] = new Date();
   var newcliente = new Cliente(data);
   newcliente.save().then((rr) =>{
@@ -387,7 +435,7 @@ router.put(/cliente\/[a-z0-9]{1,}$/, (req, res) => {
 });
 
 /*ORDEN*/
-//Insertar datos de la orden
+//Insertar datos de la pedido
 router.post("/orden",  (req, res) => {
 
   var data = req.body;

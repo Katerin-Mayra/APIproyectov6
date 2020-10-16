@@ -178,6 +178,7 @@ router.delete("/restaurante",(req,res)=>{
 });
 
 router.patch("/restaurante", (req, res) => {
+  console.log(req.body);
     if (req.query.id == null) {
         res.status(300).json({
         msn: "Error no existe restaurante"
@@ -186,9 +187,9 @@ router.patch("/restaurante", (req, res) => {
     }
     var id = req.query.id;
     var params = req.body;
-    REST.findOneAndUpdate({_id: id}, params, (err, docs) => {
+    REST.findByIdAndUpdate(id, params, (err, docs) => {
     res.status(200).json({
-        msm:"Actualizado",
+        msn:"Actualizado",
         docs
     });
     });

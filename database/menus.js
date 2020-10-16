@@ -15,7 +15,11 @@ var menusSchema = Schema({
         type: Date,
         default: Date.now()
     },
-    foto: String
+    foto:{
+        type: String, 
+        default: "No IMAGE",
+        required: [true, "la ruta de la imagen es necesaria"]
+    }
 })
 //Nombre, precio, descripción, fechaderegistro, fotografía del producto
 
