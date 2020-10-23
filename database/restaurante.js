@@ -3,6 +3,10 @@
 
 var mongoose= require("./connect"); //conectar con el connect.js
 var RESTAURANTESCHEMA =new mongoose.Schema({
+    cliente:{
+        type:String,
+        default: "5f921063e6c06d0168d5bf1f"
+    },
     name:{
         type:String,
         required:[true,"EL nombre del restaurante es necesario"]

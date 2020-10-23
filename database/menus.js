@@ -2,9 +2,10 @@ var mongoose = require("./connect");
 var Schema = mongoose.Schema;
 var menusSchema = Schema({
 
-    restaurant: {
-        type: Schema.Types.ObjectId,
-        ref: "Restaurant"
+    restaurante: {
+        type: String,
+      //  ref: "Restaurant",
+        default:"5f9211bee6c06d0168d5bf20"
     },
     nombre: String,
     precio: {

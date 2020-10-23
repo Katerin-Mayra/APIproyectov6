@@ -7,20 +7,18 @@ var clienteSchema = new Schema({
   telefono : Number,
   email : {
     type: String,
-    required:[true,"El email es necesario"],
-    validate:{
-        validator:(value)=>{
-            var reg =new RegExp("[\w\.]+@[\w\.]+\.\w(3,3)","g");
-             /^[\w\.]+@[\w\.]+\.\w{3,3}$/.test(value);
-            
-        }
-    },
-    message: props =>`${props.value}no es valido `
+        required: [true, "El email es necesario"],
+     
+
   },
   password : {
     type: String,
-    required: [true,"EL password es necesario"],
-    min:[6,"EL password debe tener un minimo de 6 caracteres"],
+    required: [true, "El password es necesario"],
+    min: [6, "El password debe tener un minimo de 6 caracteres"],
+    max:[10, "El password debe tener un minimo de 6 caracteres"],
+  
+
+    
 
 },
   Fecha_Registro: {

@@ -7,22 +7,30 @@ var ordenSchema = new Schema({
   //Idmenus : {type: Schema.ObjectId, ref: "menus"},
   //Idrestaurant: {type: Schema.ObjectId, ref: "restaurant"},
   //Idcliente : {type: Schema.ObjectId, ref: "cliente"},
-  cliente: {
-  type: Schema.Types.ObjectId,
-  ref: "Cliente"
-  },
+  
 
   restaurant:{
     type: Schema.Types.ObjectId,
     ref: "Restaurant"
   },
-  menus : {
-    type: Schema.Types.ObjectId,
+  menus:{
+    type: String,
     ref: "Menus"
   },
-  lugar_envio: Number,
+  lugar_envio: String,
   precios : Number,
   cantidad :Number,
+  nombre :String,
+  descripcion :String,
+  cliente: {
+    type: String,
+    default:"5f91fbc7b5000900cedb06d0"
+    },
+  estado:{
+    type: String, 
+    default:"espera"
+
+  },
   Fecha_Registro:
     {
       type:Date,
@@ -30,7 +38,7 @@ var ordenSchema = new Schema({
 
     },
 
-pago_total : Number,
+pago_total : Number
 });
 var orden = mongoose.model("Orden", ordenSchema);
 module.exports = orden;

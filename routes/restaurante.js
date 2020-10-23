@@ -8,6 +8,47 @@ var REST= require("../database/restaurante");
     fileSize: 50 * 1024 * 1024
 }));*/
 
+
+router.get("/restaurante",(req, res) => {
+  var skip = 0;
+  var limit = 10;
+  if (req.query.skip != null) {
+    skip = req.query.skip;
+  }
+
+  if (req.query.limit != null) {
+    limit = req.query.limit;
+  }
+  REST.find({}).skip(skip).limit(limit).exec((err, docs) => {
+    if (err) {
+      res.status(500).json({
+        "msn" : "Error en la db"
+      });
+      return;
+    }
+    res.status(200).json(docs);
+  });
+});
+//resturante ver por id de cliente kato
+router.get(/restaurante\/[a-z0-9]{1,}$/, (req, res) => {
+  var url = req.url;
+  var id1 =url;
+  var id = url.split("/")[2];
+  console.log(id);
+  REST.find({cliente : id}).exec( (error, docs) => {
+    if (docs != null) {
+        res.status(200).json(docs);
+        return;
+    }
+
+    res.status(200).json({
+      "msn" : "No existe el pedido "
+    });
+  })
+});
+
+/*
+listo
 router.get("/restaurante",(req, res) => {
     var skip = 0;
     var limit = 10;
@@ -28,7 +69,9 @@ router.get("/restaurante",(req, res) => {
       res.status(200).json(docs);
     });
   });
-  /*
+*/
+/*
+  
 router.get("/restaurante",(req,res)=>{
  //filtrar
     //http://localhost:8000/api/1.0/restaurante?
@@ -44,6 +87,11 @@ router.get("/restaurante",(req,res)=>{
         filter["name"]=expresion;
        
     }
+    if(params.cliente != null){
+      var expresion=new RegExp(params.cliente);
+      filter["cliente"]=expresion;
+     
+  }
     //filtrar mas datos
     //http://localhost:8000/api/1.0/restaurante?name=kati&filters=name,nit
     if(params.filters != null){
@@ -57,9 +105,9 @@ router.get("/restaurante",(req,res)=>{
         var data = params.order.split(",");
         var number = parseInt(data[1]);
         order[data[0]] = number;
-    }
+    }*/
 
-
+/*
 
     //muestro los datos get de usuario
    REST.find(filter).//filtro de nombre
@@ -70,11 +118,22 @@ router.get("/restaurante",(req,res)=>{
            res.status(500).json({msn:"Error en el servidor"});
            return;
        }
-       res.status(200).json(docs);
+      // res.status(200).json(docs);
+       res.status(200).json({
+        "resp": 200,
+        
+        docs,
+        "msn" : "Orden editado con exito"
+      });
        return;
    });
-});*/
+});
+
+*/
+
+
 router.post("/restaurante",(req, res) => {
+  console.log(req.body);
     var data = req.body;
     //Validacion
     //Ustedes se opupan de validar estos datos
@@ -82,11 +141,14 @@ router.post("/restaurante",(req, res) => {
     data["registerdate"] = new Date();
     var newrestaurant = new REST(data);
     newrestaurant.save().then( (rr) => {
+      
       //content-type
       res.status(200).json({
+        
         "id" : rr._id,
         "msn" : "Restaurante Agregado con exito"
       });
+      console.log(newrestaurant.body);
     });
   });
 /*
