@@ -5,6 +5,7 @@ var Menus = require("../database/menus");
 var Cliente = require("../database/cliente");
 var Orden = require("../database/orden");
 var Users = require("../database/user");
+var factura = require("../database/factura");
 var valid=require("./utils/valid");
 
 //var jwt = require("jsonwebtoken");
@@ -582,7 +583,56 @@ router.get("/orden", (req, res, next) =>{
 router.get(/orden\/[a-z0-9]{1,}$/, (req, res) => {
   var url = req.url;
   var id = url.split("/")[2];
-  Orden.find({cliente : id}).exec( (error, docs) => {
+
+  Orden.find({cliente  : id}).exec( (error, docs) => {
+    if (docs != null) {
+        res.status(200).json(docs);
+        return;
+    }
+
+    res.status(200).json({
+
+        "array_texto":
+          {
+            "texto":"<b>orden</b>",
+            "texto":"registrado con exito"
+          }
+
+
+    });
+  })
+  
+  
+});
+////ver pedidos segun el menu
+router.get(/ordenm\/[a-z0-9]{1,}$/, (req, res) => {
+  var url = req.url;
+  var id = url.split("/")[2];
+
+  Orden.find({menus  : id}).exec( (error, docs) => {
+    if (docs != null) {
+        res.status(200).json(docs);
+        return;
+    }
+
+    res.status(200).json({
+
+        "array_texto":
+          {
+            "texto":"<b>orden</b>",
+            "texto":"registrado con exito"
+          }
+    });
+  })
+
+});
+
+//orden kato id de menu
+/*router.get("/orden", (req, res) => {
+  var url = req.url;
+  var id = url.split("?id=")[2];
+  console.log(id);
+  Orden.find({menus : id}).exec( (error, docs) => {
     if (docs != null) {
         res.status(200).json(docs);
         return;
@@ -600,6 +650,8 @@ router.get(/orden\/[a-z0-9]{1,}$/, (req, res) => {
     });
   })
 });
+
+*/
 
 //Elimina una orden
 /*router.delete('/orden', (req, res,) => {
@@ -734,5 +786,53 @@ router.put(/orden\/[a-z0-9]{1,}$/, (req, res) => {
       return;
   });
 });
+/*
+
+router.get("/factura", (req, res, next) =>{
+  factura.find({}).populate("menus").populate("cliente").populate("restaurant").exec((error, docs) => {
+    res.status(200).json(docs);
+  });
+});*/
+
+router.post("/factura",(req, res) => {
+  console.log(req.body);
+    var data = req.body;
+    //Validacion
+    //Ustedes se opupan de validar estos datos
+    //OJO
+    data["registerdate"] = new Date();
+    var newfactura = new factura(data);
+    newfactura.save().then( (rr) => {
+      
+      //content-type
+      res.status(200).json({
+        
+        "id" : rr._id,
+        "msn" : "factura Agregado con exito"
+      });
+      console.log(newfactura.body);
+    });
+  });
+
+  router.get("/factura",(req, res) => {
+    var skip = 0;
+    var limit = 10;
+    if (req.query.skip != null) {
+      skip = req.query.skip;
+    }
+  
+    if (req.query.limit != null) {
+      limit = req.query.limit;
+    }
+    factura.find({}).skip(skip).limit(limit).exec((err, docs) => {
+      if (err) {
+        res.status(500).json({
+          "msn" : "Error en la db"
+        });
+        return;
+      }
+      res.status(200).json(docs);
+    });
+  });
 
 module.exports = router;
