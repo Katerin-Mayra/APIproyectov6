@@ -358,7 +358,7 @@ router.post('/cliente', async(req, res) => {
 //checkPassword tendrá que verificar si el password contiene números y caracteres. que sea mínimamente de 6 caracteres y que siempre comience con una letra mayúscula
  // k1ana&
   if(!valid.checkPassword(params.password)){
-  res.status(300).json({msn:"EL password  . Necesita almenos un numero una letra minuscula ,un caracter especial y minimamente de 6 caracteres"});
+  res.status(300).json({"msn":"EL password  . Necesita almenos un numero una letra minuscula ,un caracter especial y minimamente de 6 caracteres"});
   return;
   }
   
