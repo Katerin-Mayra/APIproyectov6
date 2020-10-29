@@ -41,7 +41,7 @@ var RESTAURANTESCHEMA =new mongoose.Schema({
     },
     lat:{
         type: String,
-        required: [true,"EL log es necesario"],
+        required: [true,"EL lat es necesario"],
         default: "111111111",
     },
     logo:String,

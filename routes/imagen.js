@@ -44,12 +44,16 @@ router.post("/sendfile", (req, res) => {
             obj["relativepath"] = "/api/1.0/getfile/?id=" + obj["hash"];
             
         var updateimg = new IMG(obj);
+        console.log(updateimg);
         updateimg.save((err, docs) => {
             if (err) {
                 res.status(500).json({msn: "ERROR "})
                 return;
             }
-            res.status(200).json({name: imgrest.name});
+            res.status(200).json({
+                resp:200,
+                updateimg,
+                name: imgrest.name});
         });
     });
 });
